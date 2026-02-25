@@ -5,7 +5,6 @@ import com.aynur.order_service.client.PaymentClient;
 import com.aynur.order_service.dto.CreateOrderRequest;
 import com.aynur.order_service.dto.OrderResponse;
 import org.springframework.stereotype.Service;
-
 @Service
 public class OrderService {
 
@@ -20,11 +19,13 @@ public class OrderService {
 
     public OrderResponse createOrder(CreateOrderRequest req) {
 
+        String orderId = java.util.UUID.randomUUID().toString();
+
         if (!inventoryClient.hasStock(req.getProductId(), req.getQuantity())) {
-            return new OrderResponse("REJECTED", "Stock not available");
+            return new OrderResponse(orderId, "REJECTED", "Stock not available");
         }
 
         String paymentResult = paymentClient.pay(req);
-        return new OrderResponse("CREATED", paymentResult);
+        return new OrderResponse(orderId, "CREATED", "Payment: " + paymentResult);
     }
 }
