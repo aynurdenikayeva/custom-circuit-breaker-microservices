@@ -9,12 +9,12 @@ public class PaymentClient {
     private final WebClient webClient;
 
     public PaymentClient(WebClient.Builder builder) {
-        this.webClient = builder.baseUrl("http://payment-service").build();
+        this.webClient = builder.build();
     }
 
     public String pay(CreateOrderRequest req) {
         return webClient.post()
-                .uri("/payments")
+                .uri("http://payment-service/payments")
                 .bodyValue(req)
                 .retrieve()
                 .bodyToMono(String.class)
